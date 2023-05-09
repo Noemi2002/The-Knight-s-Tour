@@ -18,7 +18,17 @@ The Warnsdorff's algorithm is a heuristic for finding a knight's tour. The knigh
 
 #lang racket
 
-
-
-
+(display "Hello World\n")
 ```
+
+---
+
+# How to create an executable
+
+`$ raco exe -o hello hello.rkt`
+
+This will create an executabe hello or hello.exe depending on your platform.
+
+For help:
+
+`$ ./hello -h or hello.exe -h`

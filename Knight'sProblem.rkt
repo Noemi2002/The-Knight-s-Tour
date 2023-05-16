@@ -1,7 +1,10 @@
 #lang racket
 
-
+;Returns just a solution to the problem
+;Parameters: the number of boxes and a list with the starting position
+;Output: a list with all the boxes visited
 (define (PDC-Sol n start)
+
   (define (valid-position? x y path)
     (and (<= 0 x (- n 1))
          (<= 0 y (- n 1))
@@ -37,7 +40,6 @@
 
 
 (PDC-Sol 3 '(0 . 0))
-;----
 
 
 

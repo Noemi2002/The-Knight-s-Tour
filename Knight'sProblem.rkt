@@ -22,15 +22,17 @@
                   (cons (- x 1) (+ y 2)))))
   
   (define (warnsdorff x y path)
-  (cond ((null? (sort (next-moves x y path) (lambda (a b)
-                                              (<= (length (next-moves (car a) (cdr a) path))
-                                                  (length (next-moves (car b) (cdr b) path)))))) path)
+  (cond [(null? 
+        (sort (next-moves x y path) (lambda (a b) (<= (length (next-moves (car a) (cdr a) path))
+                                                      (length (next-moves (car b) (cdr b) path))))))] path)
+                                                      
         (else (warnsdorff (car (car (sort (next-moves x y path) (lambda (a b)
                                                                      (<= (length (next-moves (car a) (cdr a) path))
                                                                          (length (next-moves (car b) (cdr b) path)))))))
                           (cdr (car (sort (next-moves x y path) (lambda (a b)
                                                                      (<= (length (next-moves (car a) (cdr a) path))
                                                                          (length (next-moves (car b) (cdr b) path)))))))
+
                           (cons (car (sort (next-moves x y path) (lambda (a b)
                                                                   (<= (length (next-moves (car a) (cdr a) path))
                                                                       (length (next-moves (car b) (cdr b) path)))))) path)))))

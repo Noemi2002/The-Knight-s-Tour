@@ -1,38 +1,44 @@
 #lang racket
 
-(define (solucionar-tour camino tamano)
-    (cond ((= (length camino) (* tamano tamano)) camino)
-          (else (encontrar-solucion camino (mover (car camino) tamano camino) tamano))))
+
+(define (PDC-Sol n start)
+  (define (valid-position? x y path)
+    (and (<= 0 x (- n 1))
+         (<= 0 y (- n 1))
+         (not (member (cons x y) path))))
+  
+  (define (next-moves x y path)
+    (filter (lambda (pos) (valid-position? (car pos) (cdr pos) path))
+            (list (cons (+ x 1) (+ y 2))
+                  (cons (+ x 2) (+ y 1))
+                  (cons (+ x 2) (- y 1))
+                  (cons (+ x 1) (- y 2))
+                  (cons (- x 1) (- y 2))
+                  (cons (- x 2) (- y 1))
+                  (cons (- x 2) (+ y 1))
+                  (cons (- x 1) (+ y 2)))))
+  
+  (define (warnsdorff x y path)
+  (cond ((null? (sort (next-moves x y path) (lambda (a b)
+                                              (<= (length (next-moves (car a) (cdr a) path))
+                                                  (length (next-moves (car b) (cdr b) path)))))) path)
+        (else (warnsdorff (car (car (sort (next-moves x y path) (lambda (a b)
+                                                                     (<= (length (next-moves (car a) (cdr a) path))
+                                                                         (length (next-moves (car b) (cdr b) path)))))))
+                          (cdr (car (sort (next-moves x y path) (lambda (a b)
+                                                                     (<= (length (next-moves (car a) (cdr a) path))
+                                                                         (length (next-moves (car b) (cdr b) path)))))))
+                          (cons (car (sort (next-moves x y path) (lambda (a b)
+                                                                  (<= (length (next-moves (car a) (cdr a) path))
+                                                                      (length (next-moves (car b) (cdr b) path)))))) path)))))
+
+  (reverse (warnsdorff (car start) (cdr start) (list start))))
 
 
 
-(define (mover posicion tamano camino)
-    (define (check-pos pos) ;x=card pos, y=cdr pos
-      (and (>= (car pos) 0)
-           (< (car pos) tamano)
-           (>= (cdr pos) 0)
-           (< (cdr pos) tamano)
-           (not (member pos camino))))
-    (posicion-valida check-pos (list (cons (+ (car posicion) 1) (+ (cdr posicion) 2))
-                                     (cons (+ (car posicion) 2) (+ (cdr posicion) 1))
-                                     (cons (+ (car posicion) 2) (- (cdr posicion) 1))
-                                     (cons (+ (car posicion) 1) (- (cdr posicion) 2))
-                                     (cons (- (car posicion) 1) (- (cdr posicion) 2))
-                                     (cons (- (car posicion) 2) (- (cdr posicion) 1))
-                                     (cons (- (car posicion) 2) (+ (cdr posicion) 1))
-                                     (cons (- (car posicion) 1) (+ (cdr posicion) 2)))))
+(PDC-Sol 3 '(0 . 0))
+;----
 
-(define (posicion-valida pos lista)
-  (cond ((null? lista) lista)
-        ((and (pos (car lista)) (posicion-valida pos (cdr lista))))
-        (else (cons (car lista) (posicion-valida pos (cdr lista))))))
-
-(define (encontrar-solucion camino posiciones tamano)
-    (cond ((null? posiciones) posiciones)
-          ((solucionar-tour (cons (car posiciones) camino ) tamano))
-          (else (encontrar-solucion camino (cdr posiciones)))))
-
-(solucionar-tour '((0 . 0)) 5)
 
 
 

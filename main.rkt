@@ -27,4 +27,3 @@
 
 ; Call the function and print the result
 (traverse-matrix (chess-board))
-

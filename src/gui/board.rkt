@@ -97,9 +97,3 @@
                     [vertical-inset 0]
                     [editor board]))
 (send toplevel show #t)
-
-;; Insert one of each of the chess pieces onto the board, so we can see them
-;; and drag them around.
-(for ([id (in-hash-keys chess-piece-data)])
-  (define piece (make-chess-piece id))
-  (send board insert piece (random (* 50 6)) (random (* 50 6))))

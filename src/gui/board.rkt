@@ -66,7 +66,8 @@
   (send dc set-pen pen)
   (send dc set-font font)
   
-  (for* ([row (in-range 8)] [col (in-range 8)]
+  (define board-size 4)
+  (for* ([row (in-range board-size)] [col (in-range board-size)]
          #:when (or (and (odd? row) (even? col))
                     (and (even? row) (odd? col))))
     (define-values [x y] (values (* col cell-width) (* row cell-height)))
@@ -83,8 +84,6 @@
     (send dc draw-text file x (- dc-height h margin))))
 
 
-;; A test program for our chess-piece% objects:
-
 ;; The pasteboard% that will hold and manage the chess pieces
 (define board (new chess-board%))
 ;; Toplevel window for our application
@@ -96,4 +95,5 @@
                     [horizontal-inset 0]
                     [vertical-inset 0]
                     [editor board]))
+
 (send toplevel show #t)

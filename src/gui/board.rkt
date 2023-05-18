@@ -88,7 +88,7 @@
 ;; The pasteboard% that will hold and manage the chess pieces
 (define board (new chess-board%))
 ;; Toplevel window for our application
-(define toplevel (new frame% [label "Chess Board"] [width (* 50 8)] [height (* 50 8)]))
+(define toplevel (new frame% [label "Chess Board"] [width (* 100 8)] [height (* 100 8)]))
 ;; The canvas which will display the pasteboard contents
 (define canvas (new editor-canvas%
                     [parent toplevel]

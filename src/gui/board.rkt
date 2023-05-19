@@ -52,13 +52,14 @@
 
     ))
 
+(define board-size 16=
 (define (draw-chess-board dc)
   (define brush (send the-brush-list find-or-create-brush "gray" 'solid))
   (define pen (send the-pen-list find-or-create-pen "black" 1 'transparent))
   (define font (send the-font-list find-or-create-font 8 'default 'normal 'normal))
   (define-values (dc-width dc-height) (send dc get-size))
-  (define cell-width (/ dc-width 8))
-  (define cell-height (/ dc-height 8))
+  (define cell-width (/ dc-width board-size))
+  (define cell-height (/ dc-height board-size))
   (define margin 3)
     
   (send dc clear)
@@ -66,7 +67,6 @@
   (send dc set-pen pen)
   (send dc set-font font)
   
-  (define board-size 4)
   (for* ([row (in-range board-size)] [col (in-range board-size)]
          #:when (or (and (odd? row) (even? col))
                     (and (even? row) (odd? col))))
@@ -87,7 +87,7 @@
 ;; The pasteboard% that will hold and manage the chess pieces
 (define board (new chess-board%))
 ;; Toplevel window for our application
-(define toplevel (new frame% [label "Chess Board"] [width (* 100 8)] [height (* 100 8)]))
+(define toplevel (new frame% [label "Chess Board"] [width (*  70 board-size)] [height (* 70 board-size)]))
 ;; The canvas which will display the pasteboard contents
 (define canvas (new editor-canvas%
                     [parent toplevel]

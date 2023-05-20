@@ -1,4 +1,0 @@
-- Do variants of the algorithm 
-- Draw the board layout
-- Implement the algorithm with the board layout
-- Document the algorithm

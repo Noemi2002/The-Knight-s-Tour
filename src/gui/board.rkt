@@ -16,7 +16,8 @@
   (define-values (dc-width dc-height) (send dc get-size))
   (define cell-width (/ dc-width board-size))
   (define cell-height (/ dc-height board-size))
-    
+  
+
   (send dc clear)
   (send dc set-brush brush)
   (send dc set-pen pen)
@@ -26,8 +27,11 @@
          #:when (or (and (odd? row) (even? col))
                     (and (even? row) (odd? col))))
     (define-values [x y] (values (* col cell-width) (* row cell-height)))
-    (send dc draw-rectangle x y cell-width cell-height)))
+    (send dc draw-rectangle x y cell-width cell-height))
 
+  ; Draw a number 1 in the top left corner of the (7 . 1) tile
+  (define-values [x y] (values (* 1 cell-width) (* 7 cell-height)))
+  (send dc draw-text "1" x y))
 
 
 ; Define the tile size

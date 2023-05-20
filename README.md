@@ -25,10 +25,10 @@ The Warnsdorff's algorithm is a heuristic for finding a knight's tour. The knigh
 
 # How to create an executable
 
-`$ raco exe -o hello hello.rkt`
+`$ raco exe -o main board.rkt`
 
 This will create an executabe hello or hello.exe depending on your platform.
 
 For help:
 
-`$ ./hello -h or hello.exe -h`
+`$ ./main -h or main.exe -h`

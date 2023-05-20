@@ -32,25 +32,13 @@
         (send dc draw-text glyph (+ x ox) (+ y oy))))
     ))
 
-(define chess-piece-data
-  (hash
-   "K" #\u2654 "Q" #\u2655 "R" #\u2656 "B" #\u2657 "N" #\u2658 "P" #\u2659
-   "k" #\u265A "q" #\u265B "r" #\u265C "b" #\u265D "n" #\u265E "p" #\u265F))
-
-(define (make-chess-piece id)
-  (define glyph (hash-ref chess-piece-data id))
-  (define font (send the-font-list find-or-create-font 20 'default 'normal 'normal))
-  (new chess-piece% [glyph (string glyph)] [font font] [size 35]))
 
 (define chess-board%
   (class pasteboard%
     (super-new)
-
     (define/override (on-paint before? dc . other)
       (when before?
-        (draw-chess-board dc)))
-
-    ))
+        (draw-chess-board dc)))))
 
 (define board-size 16)
 (define (draw-chess-board dc)
@@ -71,21 +59,11 @@
          #:when (or (and (odd? row) (even? col))
                     (and (even? row) (odd? col))))
     (define-values [x y] (values (* col cell-width) (* row cell-height)))
-    (send dc draw-rectangle x y cell-width cell-height))
-
-  (for ([(rank index) (in-indexed '("8" "7" "6" "5" "4" "3" "2" "1"))])
-    (define-values [_0 h _1 _2] (send dc get-text-extent rank font #t))
-    (define y (+ (* index cell-height) (- (/ cell-height 2) (/ h 2))))
-    (send dc draw-text rank margin y))
-  
-  (for ([(file index) (in-indexed '("a" "b" "c" "d" "e" "f" "g" "h"))])
-    (define-values [w h _1 _2] (send dc get-text-extent file font #t))
-    (define x (+ (* index cell-width) (- (/ cell-width 2) (/ w 2))))
-    (send dc draw-text file x (- dc-height h margin))))
+    (send dc draw-rectangle x y cell-width cell-height)))
 
 
 ; Define the tile size
-(define tile-size 65)
+(define tile-size 60)
 ;; The pasteboard% that will hold and manage the chess pieces
 (define board (new chess-board%))
 ;; Toplevel window for our application

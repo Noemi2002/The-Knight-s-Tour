@@ -6,10 +6,15 @@
     (super-new)
     (define/override (on-paint before? dc . other)
       (when before?
-        (draw-chess-board dc)))))
+        (draw-chess-board dc '((1 2 3 4 5) (1 ))
+        )
+      )
+    )
+  )
+)
 
 (define board-size 16)
-(define (draw-chess-board dc)
+(define (draw-chess-board dc matrix-solution)
   (define brush (send the-brush-list find-or-create-brush "orange" 'solid))
   (define pen (send the-pen-list find-or-create-pen "black" 1 'transparent))
   (define font (send the-font-list find-or-create-font 8 'default 'normal 'normal))

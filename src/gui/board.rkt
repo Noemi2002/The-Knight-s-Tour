@@ -1,20 +1,63 @@
 #lang racket/gui
 
 
+(define board-size 16)
+
+;Returns just a solution to the problem
+;Parameters: the number of boxes and a list with the starting position
+;Output: a list with all the boxes visited
+(define (PDC-Sol n start)
+
+  (define (valid-position? x y path)
+    (and (<= 0 x (- n 1))
+         (<= 0 y (- n 1))
+         (not (member (cons x y) path))))
+  
+  (define (next-moves x y path)
+    (filter (lambda (pos) (valid-position? (car pos) (cdr pos) path))
+            (list (cons (+ x 1) (+ y 2))
+                  (cons (+ x 2) (+ y 1))
+                  (cons (+ x 2) (- y 1))
+                  (cons (+ x 1) (- y 2))
+                  (cons (- x 1) (- y 2))
+                  (cons (- x 2) (- y 1))
+                  (cons (- x 2) (+ y 1))
+                  (cons (- x 1) (+ y 2)))))
+  
+  (define (warnsdorff x y path)
+  (cond ((null? (sort (next-moves x y path) (lambda (a b)
+                                              (<= (length (next-moves (car a) (cdr a) path))
+                                                  (length (next-moves (car b) (cdr b) path)))))) path)
+        (else (warnsdorff (car (car (sort (next-moves x y path) (lambda (a b)
+                                                                     (<= (length (next-moves (car a) (cdr a) path))
+                                                                         (length (next-moves (car b) (cdr b) path)))))))
+                          (cdr (car (sort (next-moves x y path) (lambda (a b)
+                                                                     (<= (length (next-moves (car a) (cdr a) path))
+                                                                         (length (next-moves (car b) (cdr b) path)))))))
+                          (cons (car (sort (next-moves x y path) (lambda (a b)
+                                                                  (<= (length (next-moves (car a) (cdr a) path))
+                                                                      (length (next-moves (car b) (cdr b) path)))))) path)))))
+
+  (reverse (warnsdorff (car start) (cdr start) (list start))))
+
+
+
+; The pasteboard% class that will hold and manage the knight's tour
+; Parameters: none
+; Output: a pasteboard% object
 (define chess-board%
   (class pasteboard%
     (super-new)
     (define/override (on-paint before? dc . other)
       (when before?
-        (draw-chess-board dc '((1 2 3 4 5) (1 ))
-        )
-      )
-    )
-  )
-)
+        (define solved-matrix (PDC-Sol board-size '(1 . 0)))
+        (PDC-Paint dc solved-matrix)))))
 
-(define board-size 16)
-(define (draw-chess-board dc matrix-solution)
+
+; Draws the chess board with the steps from the solution
+; Parameters: the device context and the solution
+; Output: the chess board with the steps from the solution
+(define (PDC-Paint dc matrix-solution)
   (define brush (send the-brush-list find-or-create-brush "orange" 'solid))
   (define pen (send the-pen-list find-or-create-pen "black" 1 'transparent))
   (define font (send the-font-list find-or-create-font 8 'default 'normal 'normal))
@@ -34,9 +77,14 @@
     (define-values [x y] (values (* col cell-width) (* row cell-height)))
     (send dc draw-rectangle x y cell-width cell-height))
 
-  ; Draw a number 1 in the top left corner of the (7 . 1) tile
-  (define-values [x y] (values (* 1 cell-width) (* 7 cell-height)))
-  (send dc draw-text "1" x y))
+  (define counter 1)
+  (for ([pair matrix-solution]
+          [i (in-naturals)]
+          [j (in-naturals)])
+      (display pair)
+      (send dc draw-text (number->string counter) (* (car pair) cell-width) (* (cdr pair) cell-height)
+      (set! counter (+ counter 1)))))
+
 
 
 ; Define the tile size
@@ -58,3 +106,4 @@
 
 ; Show the toplevel window
 (send toplevel show #t)
+

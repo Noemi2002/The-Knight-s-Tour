@@ -39,8 +39,11 @@
   (reverse (warnsdorff (car start) (cdr start) (list start))))
 
 
+; Use example 
+; (PDC-Sol 5 '(0 . 0))
+; (PDC-Sol 8 '(3 . 5))
 
-;(PDC-Sol 8 '(1 . 0))
+
 
 ; Returns 5 solutions to the problem
 ; Parameters: the number of boxes and a list with the starting position
@@ -65,7 +68,11 @@
     ((>= (length unique-solutions) 5) (take unique-solutions 5))
     (else unique-solutions)))
 
-(PDC-Todas 3 '(0 . 0))
+
+; Use example
+; (PDC-Todas 5 '(0 . 0))
+; (PDC-Todas 8 '(3 . 5))
+; (PDC-Todas 3 '(0 . 0))
 
 
 
